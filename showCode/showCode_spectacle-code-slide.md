@@ -9,7 +9,7 @@ $ npm start
 ```
 Open a browser and hit http://localhost:3000, and we are ready to roll
 
-## Step 2: install 
+## Step 2: install spectacle-code-slide 
 ```
 $ npm install --save spectacle-code-slide
 $ vi presentation/index.js
@@ -18,7 +18,7 @@ $ npm start
 ```
 Open a browser and hit http://localhost:3000, and we are ready to roll, use key up & down to show.
 
-### awwsome!
+### awesome!
 
 ## Usage
 presentation/index.js
