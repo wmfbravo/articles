@@ -41,10 +41,12 @@ def isnote(str):
 
 
 def splitChinese(inputFile):
+    global IsSkip
     fin = open(inputFile, 'r')
     zhList = []
     lineNum = 0
     notelist = []
+    IsSkip = False;
     for eachLine in fin:
         lineNum += 1
         EachLineNoNote = isnote(eachLine.strip())
