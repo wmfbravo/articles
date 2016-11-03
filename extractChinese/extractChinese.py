@@ -5,8 +5,11 @@ import re
 import codecs
 
 perfixPathLen = 0
+IsSkip = False
 
-def isnote(str,IsSkip):
+def isnote(str):
+    global IsSkip
+
     if IsSkip:
         if str.find('*/') != -1:
             IsSkip = False
@@ -33,19 +36,19 @@ def isnote(str,IsSkip):
                 IsSkip = True
         else:
             nonotestr = str
-    return nonotestr.strip() ,IsSkip
+
+    return nonotestr.strip()
 
 
 def splitChinese(inputFile):
-    fin = open(inputFile, 'r')
+    fin = open('test.js', 'r')
     zhList = []
     lineNum = 0
     notelist = []
-    IsSkip = False
     for eachLine in fin:
         lineNum += 1
-        EachLineNoNote, IsSkip = isnote(eachLine.strip(), IsSkip)
-        if (len(EachLineNoNote) == 0) or IsSkip :
+        EachLineNoNote = isnote(eachLine.strip())
+        if len(EachLineNoNote) == 0:
             continue
 
         line = EachLineNoNote.decode('utf-8', 'ignore')
