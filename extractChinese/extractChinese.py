@@ -11,7 +11,7 @@ def isnote(str,IsSkip):
         if str.find('*/') != -1:
             IsSkip = False
             nonotestr = str[str.find('*/') + 2:]
-        if str.find('-->') != -1:
+        elif str.find('-->') != -1:
             IsSkip = False
             nonotestr = str[str.find('-->') + 4:]
         else:
@@ -44,22 +44,19 @@ def splitChinese(inputFile):
     IsSkip = False
     for eachLine in fin:
         lineNum += 1
-        EachLineNoNote, IsSkip = isnote(eachLine,IsSkip)
-        if len(EachLineNoNote) == 0 :
+        EachLineNoNote, IsSkip = isnote(eachLine.strip(), IsSkip)
+        if (len(EachLineNoNote) == 0) or IsSkip :
             continue
 
-        print EachLineNoNote + str(len(EachLineNoNote))
-        if IsSkip:
-            continue
-        else:
-            line = EachLineNoNote.decode('utf-8', 'ignore')
-            zhPattern = re.compile(ur'[^\u4e00-\u9fa5]')
-            zhStr = " ".join(zhPattern.split(line)).strip()
-            zhStr = ",".join(zhStr.split())
-            if isinstance(zhStr, unicode):
-                zhStrlist = zhStr.split(',')
-                for i in zhStrlist:
-                    zhList.append(str(lineNum) + "," + i)
+        line = EachLineNoNote.decode('utf-8', 'ignore')
+        zhPattern = re.compile(ur'[^\u4e00-\u9fa5]')
+        zhStr = " ".join(zhPattern.split(line)).strip()
+        zhStr = ",".join(zhStr.split())
+        if isinstance(zhStr, unicode):
+            zhStrlist = zhStr.split(',')
+            for i in zhStrlist:
+                zhList.append(str(lineNum) + "," + i)
+
     fin.close()
     return zhList
 
