@@ -41,7 +41,7 @@ def isnote(str):
 
 
 def splitChinese(inputFile):
-    fin = open('test.js', 'r')
+    fin = open(inputFile, 'r')
     zhList = []
     lineNum = 0
     notelist = []
@@ -75,6 +75,9 @@ def getFileList(filePath, ignoredPathList):
             if os.path.isdir(filePath + "/" + filename):
                 returndirstr += getFileList(filePath + "/" + filename, ignoredPathList)
             else:
+                if filename == 'extractChinese.py':
+                    continue
+
                 chiList = splitChinese(filePath + "/" + filename)
                 for chi in chiList:
                     returnfilestr += filePath[perfixPathLen:] + "/" + filename + "," + chi + "\n"
