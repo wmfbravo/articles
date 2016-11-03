@@ -15,26 +15,25 @@ def isnote(str,IsSkip):
             IsSkip = False
             nonotestr = str[str.find('-->') + 4:]
         else:
-            IsSkip = True
-            nonotestr = str
+            nonotestr = ''
     else:
         if  str.find('//') != -1:
             nonotestr = str[0:str.find('//')]
         elif str.find('/*') != -1:
-            if str.find('/*') != -1:
+            if str.find('*/') != -1:
                 nonotestr = str[0:str.find('/*')] + str[str.find('*/') + 2:]
             else:
-                nonotestr = str
+                nonotestr = str[0:str.find('/*')]
                 IsSkip = True
         elif str.find('<!--') != -1 :
             if str.find('-->') != -1:
                 nonotestr = str[0:str.find('<!--')] + str[str.find('-->') + 3:]
             else:
-                nonotestr = str
+                nonotestr = str[0:str.find('<!--')]
                 IsSkip = True
         else:
             nonotestr = str
-    return nonotestr,IsSkip
+    return nonotestr.strip() ,IsSkip
 
 
 def splitChinese(inputFile):
@@ -44,13 +43,16 @@ def splitChinese(inputFile):
     notelist = []
     IsSkip = False
     for eachLine in fin:
-        EachLineNoNote, IsSkip = isnote(eachLine,IsSkip)
-        zhStrlist =[]
         lineNum += 1
+        EachLineNoNote, IsSkip = isnote(eachLine,IsSkip)
+        if len(EachLineNoNote) == 0 :
+            continue
+
+        print EachLineNoNote + str(len(EachLineNoNote))
         if IsSkip:
-            pass
+            continue
         else:
-            line = EachLineNoNote.strip().decode('utf-8', 'ignore')
+            line = EachLineNoNote.decode('utf-8', 'ignore')
             zhPattern = re.compile(ur'[^\u4e00-\u9fa5]')
             zhStr = " ".join(zhPattern.split(line)).strip()
             zhStr = ",".join(zhStr.split())
