@@ -46,7 +46,7 @@ def splitChinese(inputFile):
     zhList = []
     lineNum = 0
     notelist = []
-    IsSkip = False;
+    IsSkip = False
     for eachLine in fin:
         lineNum += 1
         EachLineNoNote = isnote(eachLine.strip())
