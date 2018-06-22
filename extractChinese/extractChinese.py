@@ -39,10 +39,19 @@ def isnote(str):
 
     return nonotestr.strip()
 
+def getStatment(line)
 
-def splitChinese(inputFile):
+    line = EachLineNoNote.decode('utf-8', 'ignore')
+    zhPattern = re.compile(ur'[^\u4e00-\u9fa5]')
+    zhStr = " ".join(zhPattern.split(line)).strip()
+    print zhStr
+    zhStr = ",".join(zhStr.split())
+    if isinstance(zhStr, unicode):
+        zhStrlist = zhStr.split(',')
+
+
+def splitChinese(fin):
     global IsSkip
-    fin = open(inputFile, 'r')
     zhList = []
     lineNum = 0
     notelist = []
@@ -53,16 +62,10 @@ def splitChinese(inputFile):
         if len(EachLineNoNote) == 0:
             continue
 
-        line = EachLineNoNote.decode('utf-8', 'ignore')
-        zhPattern = re.compile(ur'[^\u4e00-\u9fa5]')
-        zhStr = " ".join(zhPattern.split(line)).strip()
-        zhStr = ",".join(zhStr.split())
-        if isinstance(zhStr, unicode):
-            zhStrlist = zhStr.split(',')
-            for i in zhStrlist:
-                zhList.append(str(lineNum) + "," + i)
+        zhStrlist = getStatment(EachLineNoNote)
+        for chineseStr in zhStrlist:
+            zhList.append(str(lineNum) + "," + chineseStr)
 
-    fin.close()
     return zhList
 
 def getFileList(filePath, ignoredPathList):
@@ -74,15 +77,23 @@ def getFileList(filePath, ignoredPathList):
         filelist = os.listdir(filePath)
         for num in range(len(filelist)):
             filename = filelist[num]
-            if os.path.isdir(filePath + "/" + filename):
-                returndirstr += getFileList(filePath + "/" + filename, ignoredPathList)
+            fileFullName = filePath + "/" + filename
+            if os.path.isdir(fileFullName):
+                returndirstr += getFileList(fileFullName, ignoredPathList)
             else:
                 if filename == 'extractChinese.py':
                     continue
 
-                chiList = splitChinese(filePath + "/" + filename)
+                fin = open(fileFullName, 'r')
+                if filename.split('.').pop() == 'html':
+                    chiList = splitChineseFromHtml(fin)
+                else:
+                    chiList = splitChinese(fin)
+                fin.close()
+
                 for chi in chiList:
                     returnfilestr += filePath[perfixPathLen:] + "/" + filename + "," + chi + "\n"
+
         returnstr += returnfilestr + returndirstr
         return returnstr
     else:
